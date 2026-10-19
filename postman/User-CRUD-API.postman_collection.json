@@ -1,0 +1,49 @@
+{
+  "info": {
+    "_postman_id": "2f31b6ac-7208-48ac-8100-f8e1d40f2161",
+    "name": "User CRUD API - Assignment 01",
+    "description": "Test the five User CRUD endpoints. Run Create first; its response saves userId for the remaining requests.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000" },
+    { "key": "userId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Create user",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"name\": \"Rahim\",\n  \"email\": \"rahim@gmail.com\",\n  \"age\": 22\n}", "options": { "raw": { "language": "json" } } },
+        "url": { "raw": "{{baseUrl}}/api/users", "host": ["{{baseUrl}}"], "path": ["api", "users"] }
+      },
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('User created', function () { pm.response.to.have.status(201); });", "const user = pm.response.json();", "if (user.id) pm.collectionVariables.set('userId', user.id);"] } }]
+    },
+    {
+      "name": "Get all users",
+      "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/users", "host": ["{{baseUrl}}"], "path": ["api", "users"] } },
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('Users returned', function () { pm.response.to.have.status(200); });"] } }]
+    },
+    {
+      "name": "Get user by ID",
+      "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/users/{{userId}}", "host": ["{{baseUrl}}"], "path": ["api", "users", "{{userId}}"] } },
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('User returned', function () { pm.response.to.have.status(200); });"] } }]
+    },
+    {
+      "name": "Update user",
+      "request": {
+        "method": "PATCH",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"name\": \"Rahim Ahmed\",\n  \"age\": 23\n}", "options": { "raw": { "language": "json" } } },
+        "url": { "raw": "{{baseUrl}}/api/users/{{userId}}", "host": ["{{baseUrl}}"], "path": ["api", "users", "{{userId}}"] }
+      },
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('User updated', function () { pm.response.to.have.status(200); });"] } }]
+    },
+    {
+      "name": "Delete user",
+      "request": { "method": "DELETE", "url": { "raw": "{{baseUrl}}/api/users/{{userId}}", "host": ["{{baseUrl}}"], "path": ["api", "users", "{{userId}}"] } },
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('User deleted', function () { pm.response.to.have.status(200); });"] } }]
+    }
+  ]
+}
